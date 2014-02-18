@@ -116,20 +116,20 @@
 
 				<section>
 					<h2>Define Tasks</h2>
-					<pre><code data-trim contenteditable style="font-size: 16px; margin-top: 0;">
+					<pre><code data-trim contenteditable style="font-size: 16px; margin-top: 0;max-height: 500px;">
 module.exports = function(grunt) {
 	// Project configuration.
-	grunt.initConfig({
-		pkg: grunt.file.readJSON('package.json'),
-		uglify: {
-			options: {
-				banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
-			},
-			build: {
-				src: 'src/<%= pkg.name %>.js',
-				dest: 'build/<%= pkg.name %>.min.js'
-			}
-		}
+	grunt.initConfig( {
+	    pkg: grunt.file.readJSON('package.json'),
+	    uglify: {
+	        options: {
+	            banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+	        },
+	        build: {
+	            src: 'src/<%= pkg.name %>.js',
+	            dest: 'build/<%= pkg.name %>.min.js'
+	        }
+	    }
 	});
 	// Load the plugin that provides the "uglify" task.
 	grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -276,9 +276,11 @@ gulp.task('scripts', function() {
 
 				<section>
 					<h2>Side by side</h2>
-					<div style="display: inline-table; width: 800px;">
-						<div style="display: table-cell; width: 400px;">
-							<pre><code>
+					<table>
+						<tr>
+							<td>
+								Gulp
+								<pre><code style="font-size: 13px; max-height: 450px;">
 var gulp = require('gulp');
 var coffee = require('gulp-coffee');
 var concat = require('gulp-concat');
@@ -296,10 +298,11 @@ gulp.task('scripts', function() {
     .pipe(concat('all.min.js'))
     .pipe(gulp.dest('build/js'));
 });
-						</code></pre>
-						</div>
-						<div style="display: table-cell;  width: 400px;">
-							<pre><code>
+								</code></pre>
+							</td>
+							<td>
+								Grunt
+								<pre><code style="font-size: 13px; max-height: 450px;">
 grunt.initConfig({
   concat: {
     foo: {
@@ -315,9 +318,14 @@ grunt.initConfig({
     },
   },
 });
-							</code></pre>
-						</div>
-					</div>
+								</code></pre>
+							</td>
+						</tr>
+					</table>
+				</section>
+
+				<section>
+					<h2>Questions</h2>
 				</section>
 
 			</div>
