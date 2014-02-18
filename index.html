@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Introduction to Grunt</title>
+
+		<meta name="description" content="Presentation introducing Grunt with some samples and some information about Gulp">
+		<meta name="author" content="Kevin Kazmierczak">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/sky.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+				<section>
+					<img src="images/grunt-logo.gif" alt="Grunt">
+					<h3>Kevin Kazmierczak</h3>
+					<p>
+						<small>
+							Sencha Practice Director | <a href="http://twitter.com/kazmiekr" target="_blank">@kazmiekr</a><br/>
+							<a href="mailto:kevin.kazmierczak@universalmind.com" target="_blank">kevin.kazmierczak@universalmind.com</a>
+						</small>
+					</p>
+				</section>
+
+				<section>
+					<h2>Javascript Task Runner</h2>
+					<ul>
+						<li>Automation</li>
+						<li>
+							Things like:
+							<ul>
+								<li>Minification</li>
+								<li>Unit Testing</li>
+								<li>Linting</li>
+								<li>Sass/Less compilation</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Ecosystem</h2>
+					<ul>
+						<li>Lots of plugins available</li>
+						<li>Easy to write your own</li>
+						<li>Special NodeJS modules</li>
+						<li>Lots of plugins available</li>
+						<li>
+							Two I’ve shared:
+							<ul>
+								<li>grunt-sencha-build</li>
+								<li>blackberry-build</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Getting Started</h2>
+					<pre><code>npm install -g grunt-cli</code></pre>
+					<p>Doesn’t install the runner itself, runs the version of Grunt installed next to the Gruntfile</p>
+				</section>
+
+				<section>
+					<h2>Setup</h2>
+					<ul>
+						<li>package.json - Defines all your dependencies</li>
+						<li>Gruntfile.js - Defines your tasks</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Installing Grunt and Plugins</h2>
+					<pre><code>npm install grunt --save-dev</code></pre>
+					<p>--save-dev will automatically add the installed package to your local package.json file</p>
+				</section>
+
+				<section>
+					<h2>Popular Plugins</h2>
+					<ul>
+						<li>CoffeeScript</li>
+						<li>Less</li>
+						<li>Sass</li>
+						<li>JSHint</li>
+						<li>RequireJS</li>
+						<li>Handlebars</li>
+						<li>~2300 available plugins</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Define Tasks</h2>
+					<pre><code data-trim contenteditable style="font-size: 16px; margin-top: 0;">
+module.exports = function(grunt) {
+	// Project configuration.
+	grunt.initConfig({
+		pkg: grunt.file.readJSON('package.json'),
+		uglify: {
+			options: {
+				banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+			},
+			build: {
+				src: 'src/<%= pkg.name %>.js',
+				dest: 'build/<%= pkg.name %>.min.js'
+			}
+		}
+	});
+	// Load the plugin that provides the "uglify" task.
+	grunt.loadNpmTasks('grunt-contrib-uglify');
+	// Default task(s).
+	grunt.registerTask('default', ['uglify']);
+};
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Multiple Task Targets</h2>
+					<pre><code data-trim>
+grunt.initConfig({
+  concat: {
+    foo: {
+      // concat task "foo" target options and files go here.
+    },
+    bar: {
+      // concat task "bar" target options and files go here.
+    },
+  },
+  uglify: {
+    bar: {
+      // uglify task "bar" target options and files go here.
+    },
+  },
+});
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Options</h2>
+					<pre><code data-trim>
+grunt.initConfig({
+  concat: {
+    options: {
+      // Task-level options may go here, overriding task defaults.
+    },
+    foo: {
+      options: {
+        // "foo" target options may go here, overriding task-level options.
+      },
+    },
+    bar: {
+      // No options specified; this target will use task-level options.
+    },
+  },
+});
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Write your own tasks</h2>
+					<pre><code data-trim>
+grunt.registerTask('foo', 'A sample task that logs stuff.', function(arg1, arg2) {
+  if (arguments.length === 0) {
+    grunt.log.writeln(this.name + ", no args");
+  } else {
+    grunt.log.writeln(this.name + ", " + arg1 + " " + arg2);
+  }
+});
+					</code></pre>
+					<p>Register them with npm with a ‘gruntplugin’ keyword</p>
+				</section>
+
+				<section>
+					<h2>Real World Sample</h2>
+					<ul>
+						<li>Deployment Build
+							<ul>
+								<li>Generates a sprite sheet from a folder of sprites</li>
+								<li>Compiles our Less</li>
+								<li>Builds our RequireJS modules</li>
+								<li>Posts an OSX notification to indicate success/failure</li>
+							</ul>
+						</li>
+						<li>Watcher
+							<ul>
+								<li>The first two run on any save to a *.less file or new asset in sprites folder</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Grunt Resources</h2>
+					<ul>
+						<li><a href="http://gruntjs.com" target="_blank">GruntJS Official Site</a></li>
+						<li><a href="http://davidtucker.net/articles/automating-with-grunt/" target="_blank">Detailed post of Grunt automation</a></li>
+						<li><a href="http://coding.smashingmagazine.com/2013/10/29/get-up-running-grunt/" target="_blank">Get up and Running with Grunt</a></li>
+						<li><a href="http://markdalgleish.github.io/presentation-build-wars-gulp-vs-grunt/" target="_blank">Funny presentation with similar content</a></li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Gulp</h2>
+					<p><img src="images/gulp-2x.png" alt="Gulp"></p>
+					<p><a href="http://gulpjs.com/" target="_blank">http://gulpjs.com/</a></p>
+				</section>
+
+				<section>
+					<h2>Gulp</h2>
+					<ul>
+						<li>Code over configuration</li>
+						<li>Use streaming</li>
+						<li>Basic Node module syntax</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Setup</h2>
+						<pre><code>
+npm install -g gulp
+npm install --save-dev gulp gulp-util
+						</code></pre>
+					<ul>
+						<li>Create a gulpfile.js</li>
+						<li>gulp</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Sample Gulpfile</h2>
+					<pre><code>
+var gulp = require('gulp');
+var coffee = require('gulp-coffee');
+var concat = require('gulp-concat');
+var uglify = require('gulp-uglify');
+var paths = {
+  scripts: ['client/js/**/*.coffee', '!client/external/**/*.coffee'],
+  images: 'client/img/**/*'
+};
+
+gulp.task('scripts', function() {
+  // Minify and copy all JavaScript (except vendor scripts)
+  return gulp.src(paths.scripts)
+    .pipe(coffee())
+    .pipe(uglify())
+    .pipe(concat('all.min.js'))
+    .pipe(gulp.dest('build/js'));
+});
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Side by side</h2>
+					<div style="display: inline-table; width: 800px;">
+						<div style="display: table-cell; width: 400px;">
+							<pre><code>
+var gulp = require('gulp');
+var coffee = require('gulp-coffee');
+var concat = require('gulp-concat');
+var uglify = require('gulp-uglify');
+var paths = {
+  scripts: ['client/js/**/*.coffee', '!client/external/**/*.coffee'],
+  images: 'client/img/**/*'
+};
+
+gulp.task('scripts', function() {
+  // Minify and copy all JavaScript (except vendor scripts)
+  return gulp.src(paths.scripts)
+    .pipe(coffee())
+    .pipe(uglify())
+    .pipe(concat('all.min.js'))
+    .pipe(gulp.dest('build/js'));
+});
+						</code></pre>
+						</div>
+						<div style="display: table-cell;  width: 400px;">
+							<pre><code>
+grunt.initConfig({
+  concat: {
+    foo: {
+      // concat task "foo" target options and files go here.
+    },
+    bar: {
+      // concat task "bar" target options and files go here.
+    },
+  },
+  uglify: {
+    bar: {
+      // uglify task "bar" target options and files go here.
+    },
+  },
+});
+							</code></pre>
+						</div>
+					</div>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
